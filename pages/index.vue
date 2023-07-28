@@ -38,6 +38,10 @@
       </div>
     </div>
   </div>
+
+  <div class="text-center">
+    <button type="button" class="bg-teal-500 hover:bg-teal-300 py-3 px-10 text-2xl font-semibold rounded-xl">Tovább</button>
+  </div>
 </template>
 
 <style scoped>
