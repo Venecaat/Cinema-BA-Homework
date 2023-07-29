@@ -12,6 +12,13 @@
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@types/node": "^18.17.0",
-    "nuxt": "^3.6.5"
+    "nuxt": "^3.6.5",
+    "prisma": "^5.0.0"
+  },
+  "prisma": {
+    "schema": "./server/database/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.0.0"
   }
 }
