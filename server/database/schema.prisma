@@ -6,6 +6,35 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = "mysql://root@localhost:3306/cinema"
+}
+
+model Room {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  seats   Seat[]
+}
+
+model Seat {
+  id            Int     @id @default(autoincrement())
+  row_number    Int
+  seat_number   Int
+  room          Room    @relation(fields: [room_id], references: [id])
+  room_id       Int
+  asd           ReservedSeat[]
+}
+
+model Reservation {
+  id              Int     @id @default(autoincrement())
+  customer        String
+  reserved_seats  ReservedSeat[]
+}
+
+model ReservedSeat {
+  id                Int           @id @default(autoincrement())
+  reservation       Reservation   @relation(fields: [reservation_id], references: [id])
+  reservation_id    Int
+  seat              Seat          @relation(fields: [seat_id], references: [id])
+  seat_id           Int
 }
