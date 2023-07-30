@@ -34,7 +34,7 @@ CREATE TABLE `Reservation` (
 -- CreateTable
 CREATE TABLE `ReservedSeat` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `reservation_id` INTEGER NOT NULL,
+    `reservation_id` INTEGER NULL,
     `seat_id` INTEGER NOT NULL,
     `status` VARCHAR(191) NOT NULL,
 
@@ -45,7 +45,7 @@ CREATE TABLE `ReservedSeat` (
 ALTER TABLE `Seat` ADD CONSTRAINT `Seat_room_id_fkey` FOREIGN KEY (`room_id`) REFERENCES `Room`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ReservedSeat` ADD CONSTRAINT `ReservedSeat_reservation_id_fkey` FOREIGN KEY (`reservation_id`) REFERENCES `Reservation`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ReservedSeat` ADD CONSTRAINT `ReservedSeat_reservation_id_fkey` FOREIGN KEY (`reservation_id`) REFERENCES `Reservation`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ReservedSeat` ADD CONSTRAINT `ReservedSeat_seat_id_fkey` FOREIGN KEY (`seat_id`) REFERENCES `Seat`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -138,7 +138,7 @@ VALUES
 INSERT INTO `ReservedSeat`
 VALUES
 	-- Reservation id - 1
-	(1, 1, 3, "foglalt"),
+	(1, 1, 3, "elkelt"),
     (2, 1, 4, "elkelt"),
     (3, 1, 5, "elkelt"),
     (4, 1, 6, "elkelt"),

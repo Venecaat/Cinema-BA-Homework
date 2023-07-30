@@ -33,8 +33,8 @@ model Reservation {
 
 model ReservedSeat {
   id                Int           @id @default(autoincrement())
-  reservation       Reservation   @relation(fields: [reservation_id], references: [id])
-  reservation_id    Int
+  reservation       Reservation?  @relation(fields: [reservation_id], references: [id])
+  reservation_id    Int?
   seat              Seat          @relation(fields: [seat_id], references: [id])
   seat_id           Int
   status            String
