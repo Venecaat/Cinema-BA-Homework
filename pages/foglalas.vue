@@ -1,16 +1,28 @@
 <script setup>
-  import {useSeatsStore} from "~/store/seats";
+  import { useSeatsStore } from "~/store/seats";
 
   const store = useSeatsStore();
   let email = "";
-  const reserveSeats = () => {
+
+  const reserveSeats = async () => {
     email = document.getElementById("emailAddress").value
 
     if (!email) {
       alert("Az E-mail cím megadása kötelező!");
     }
     else {
+      const seatsToReserve = store.getList;
 
+      await useFetch("/api/finishReservation", {
+        method: "post",
+        body: {
+          customer: email,
+          seats: seatsToReserve
+        }
+      });
+
+      store.$reset();
+      navigateTo("/foglalasKesz");
     }
   }
 
