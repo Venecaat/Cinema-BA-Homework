@@ -1,9 +1,14 @@
 <script setup>
   const roomName = "ZEUS";
-  const { data } = await useFetch(`/api/reservedSeats?roomName=${roomName}`);
-  const seats = JSON.parse(JSON.stringify(data.value));
 
-  function select(e) {
+  const getSeats = async () => {
+    const { data } = await useFetch(`/api/reservedSeats?roomName=${roomName}`);
+    return JSON.parse(JSON.stringify(data.value));
+  }
+
+  const seats = await getSeats();
+
+  const select = (e) => {
     let selectedElement = e.target;
     let status = selectedElement.dataset.status;
 
@@ -34,7 +39,8 @@
       <button v-for="j in 8" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
               :class="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500' : 'bg-red-700'"
               :data-status="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad' : 'elkelt'"
-              :data-line="i" :data-seatNumber="j" :disabled="seats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
+              :data-seatID="(i - 1) * 8 + j" :data-rowNumber="i" :data-seatNumber="j"
+              :disabled="seats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
         {{ j }}
       </button>
       <div class="text-center font-semibold py-3 text-xl">
