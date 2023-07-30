@@ -17,12 +17,13 @@ model Room {
 }
 
 model Seat {
-  id            Int     @id @default(autoincrement())
-  row_number    Int
-  seat_number   Int
-  room          Room    @relation(fields: [room_id], references: [id])
-  room_id       Int
-  asd           ReservedSeat[]
+  id                  Int     @id @default(autoincrement())
+  row_number          Int
+  seat_number         Int
+  room                Room    @relation(fields: [room_id], references: [id])
+  room_id             Int
+  reservedSeats       ReservedSeat[]
+  tempReservedSeats   TempReservedSeat[]
 }
 
 model Reservation {
@@ -37,4 +38,10 @@ model ReservedSeat {
   reservation_id    Int
   seat              Seat          @relation(fields: [seat_id], references: [id])
   seat_id           Int
+}
+
+model TempReservedSeat {
+  id         Int    @id @default(autoincrement())
+  seat       Seat   @relation(fields: [seat_id], references: [id])
+  seat_id    Int
 }

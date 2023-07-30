@@ -1,4 +1,5 @@
 -- Drop Tables
+DROP TABLE IF EXISTS `TempReservedSeat`;
 DROP TABLE IF EXISTS `ReservedSeat`;
 DROP TABLE IF EXISTS `Reservation`;
 DROP TABLE IF EXISTS `Seat`;
@@ -40,6 +41,14 @@ CREATE TABLE `ReservedSeat` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `TempReservedSeat` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `seat_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Seat` ADD CONSTRAINT `Seat_room_id_fkey` FOREIGN KEY (`room_id`) REFERENCES `Room`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -49,6 +58,8 @@ ALTER TABLE `ReservedSeat` ADD CONSTRAINT `ReservedSeat_reservation_id_fkey` FOR
 -- AddForeignKey
 ALTER TABLE `ReservedSeat` ADD CONSTRAINT `ReservedSeat_seat_id_fkey` FOREIGN KEY (`seat_id`) REFERENCES `Seat`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
+-- AddForeignKey
+ALTER TABLE `TempReservedSeat` ADD CONSTRAINT `TempReservedSeat_seat_id_fkey` FOREIGN KEY (`seat_id`) REFERENCES `Seat`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- Add Values
 
