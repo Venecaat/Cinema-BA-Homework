@@ -40,7 +40,7 @@
         if (seatsCheck.some(s => s.seat_id === seat.dataset.seatid)) conflicts++;
       }
 
-      if (conflicts !== 0) alert("A kiválasztott helyek közül egy vagy több már foglalt!");
+      if (conflicts !== 0) alert("A kiválasztott helyek közül egy vagy több már foglalt vagy elkelt!");
       else {
         for (const seat of seatsToReserve) {
           store.addSeat({
@@ -49,6 +49,16 @@
             seat_number: +seat.dataset.seatnumber
           });
         }
+
+        const tempSeats = store.getList;
+
+        await useFetch("/api/tempReserveSeat", {
+          method: "post",
+          body: {
+            seats: tempSeats
+          }
+        });
+
         navigateTo("/foglalas");
       }
     }
