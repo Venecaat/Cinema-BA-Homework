@@ -17,7 +17,7 @@
     let status = selectedElement.dataset.status;
 
     if (status === "szabad"){
-      selectedElement.dataset.status = "foglalt";
+      selectedElement.dataset.status = "foglalas_alatt";
       selectedElement.classList.add("bg-orange-500", "hover:bg-orange-400");
       selectedElement.classList.remove("bg-green-600", "hover:bg-green-500");
     }
@@ -29,7 +29,7 @@
   }
 
   const reserveSeats = async () => {
-    const seatsToReserve = document.querySelectorAll("[data-status='foglalt']");
+    const seatsToReserve = document.querySelectorAll("[data-status='foglalas_alatt']");
 
     if (seatsToReserve.length === 0) alert("Nem választott ki egy helyet sem!");
     else {
