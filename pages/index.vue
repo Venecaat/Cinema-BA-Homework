@@ -44,9 +44,9 @@
       else {
         for (const seat of seatsToReserve) {
           store.addSeat({
-            seat_id: seat.dataset.seatid,
-            row_number: seat.dataset.rownumber,
-            seat_number: seat.dataset.seatnumber
+            seat_id: +seat.dataset.seatid,
+            row_number: +seat.dataset.rownumber,
+            seat_number: +seat.dataset.seatnumber
           });
         }
         navigateTo("/foglalas");
