@@ -17,3 +17,17 @@ interface Seat {
     row_number: number,
     seat_number: number
 }
+
+export const useTempReservationStore = defineStore("temp-reservation-list", {
+    state: () => {
+        return { tempResList: [] as number[]}
+    },
+    actions: {
+        addTempRes(value: number) {
+            this.tempResList.push(value);
+        }
+    },
+    getters: {
+        getList: state => JSON.parse(JSON.stringify(state.tempResList)),
+    },
+})
