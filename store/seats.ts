@@ -8,7 +8,7 @@ export const useSeatsStore = defineStore("seats-list", {
         }
     },
     getters: {
-        getList: state => state.seatsList,
+        getList: state => JSON.parse(JSON.stringify(state.seatsList)),
     },
 })
 
