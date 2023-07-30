@@ -1,4 +1,8 @@
 <script setup>
+
+  import {useSeatsStore} from "~/store/seats";
+
+  const store = useSeatsStore();
   const roomName = "ZEUS";
 
   const getSeats = async () => {
@@ -21,6 +25,32 @@
       selectedElement.dataset.status = "szabad";
       selectedElement.classList.add("bg-green-600", "hover:bg-green-500");
       selectedElement.classList.remove("bg-orange-500", "hover:bg-orange-400");
+    }
+  }
+
+  const reserveSeats = async () => {
+    const seatsToReserve = document.querySelectorAll("[data-status='foglalt']");
+
+    if (seatsToReserve.length === 0) alert("Nem választott ki egy helyet sem!");
+    else {
+      let conflicts = 0;
+      const seatsCheck = await getSeats();
+
+      for (const seat of seatsToReserve) {
+        if (seatsCheck.some(s => s.seat_id === seat.dataset.seatid)) conflicts++;
+      }
+
+      if (conflicts !== 0) alert("A kiválasztott helyek közül egy vagy több már foglalt!");
+      else {
+        for (const seat of seatsToReserve) {
+          store.addSeat({
+            seat_id: seat.dataset.seatid,
+            row_number: seat.dataset.rownumber,
+            seat_number: seat.dataset.seatnumber
+          });
+        }
+        navigateTo("/foglalas");
+      }
     }
   }
 </script>
@@ -50,7 +80,7 @@
   </div>
 
   <div class="text-center">
-    <button type="button" class="bg-teal-500 hover:bg-teal-300 py-3 px-10 text-2xl font-semibold rounded-xl">Tovább</button>
+    <button type="button" class="bg-teal-500 hover:bg-teal-300 py-3 px-10 text-2xl font-semibold rounded-xl" @click="reserveSeats">Tovább</button>
   </div>
 </template>
 
