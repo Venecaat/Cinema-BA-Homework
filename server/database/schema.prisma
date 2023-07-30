@@ -37,4 +37,5 @@ model ReservedSeat {
   reservation_id    Int
   seat              Seat          @relation(fields: [seat_id], references: [id])
   seat_id           Int
+  status            String
 }
