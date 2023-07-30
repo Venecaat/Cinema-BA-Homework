@@ -19,6 +19,8 @@
     "schema": "./server/database/schema.prisma"
   },
   "dependencies": {
-    "@prisma/client": "^5.0.0"
+    "@pinia/nuxt": "^0.4.11",
+    "@prisma/client": "^5.0.0",
+    "pinia": "^2.1.6"
   }
 }
