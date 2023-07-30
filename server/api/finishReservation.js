@@ -5,13 +5,22 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async(event) => {
     const { customer, seats } = await readBody(event);
 
-    await prisma.Reservation.create({
+    const reservation = await prisma.Reservation.create({
       data: {
         customer: customer
       }
     });
 
+    const data = Array.from(seats, seat => ({
+        reservation_id: reservation.id,
+        seat_id: seat.seat_id
+    }));
+
+    const createdReservation = await prisma.ReservedSeat.createMany({
+      data
+    })
+
     return {
-        message: "A foglalás sikeres volt!"
+        reservation: createdReservation
     }
 })
