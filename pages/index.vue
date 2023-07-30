@@ -1,8 +1,9 @@
 <script setup>
 
-  import {useSeatsStore} from "~/store/seats";
+  import { useSeatsStore, useTempReservationStore } from "~/store/seats";
 
-  const store = useSeatsStore();
+  const seatStore = useSeatsStore();
+  const tempResStore = useTempReservationStore();
   const roomName = "ZEUS";
 
   const getSeats = async () => {
@@ -43,21 +44,25 @@
       if (conflicts !== 0) alert("A kiválasztott helyek közül egy vagy több már foglalt vagy elkelt!");
       else {
         for (const seat of seatsToReserve) {
-          store.addSeat({
+          seatStore.addSeat({
             seat_id: +seat.dataset.seatid,
             row_number: +seat.dataset.rownumber,
             seat_number: +seat.dataset.seatnumber
           });
         }
+        const tempSeats = seatStore.getList;
 
-        const tempSeats = store.getList;
-
-        await useFetch("/api/tempReserveSeat", {
+        const { data } = await useFetch("/api/tempReserveSeat", {
           method: "post",
           body: {
             seats: tempSeats
           }
         });
+        const tempReservation = JSON.parse(JSON.stringify(data.value.reservation));
+
+        for (const res of tempReservation) {
+          tempResStore.addTempRes(res.id);
+        }
 
         navigateTo("/foglalas");
       }

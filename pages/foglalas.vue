@@ -1,8 +1,19 @@
 <script setup>
-  import { useSeatsStore } from "~/store/seats";
+  import { useSeatsStore, useTempReservationStore } from "~/store/seats";
 
-  const store = useSeatsStore();
+  const seatStore = useSeatsStore();
+  const tempResStore = useTempReservationStore();
   let email = "";
+
+  const removeTempRes = async () => {
+    console.log(tempResStore.getList);
+    await useFetch("/api/removeTempReservation", {
+      method: "post",
+      body: {
+        reservedSeatIds: tempResStore.getList
+      }
+    });
+  }
 
   const reserveSeats = async () => {
     email = document.getElementById("emailAddress").value
@@ -11,7 +22,7 @@
       alert("Az E-mail cím megadása kötelező!");
     }
     else {
-      const seatsToReserve = store.getList;
+      const seatsToReserve = seatStore.getList;
 
       await useFetch("/api/finishReservation", {
         method: "post",
@@ -21,20 +32,24 @@
         }
       });
 
-      store.$reset();
+      await removeTempRes();
+      seatStore.$reset();
+      tempResStore.$reset();
       navigateTo("/foglalasKesz");
     }
   }
 
-  const back = () => {
-    store.$reset();
+  const back = async () => {
+    await removeTempRes();
+    seatStore.$reset();
+    tempResStore.$reset();
     navigateTo("/");
   }
 </script>
 
 <template>
   <h1 class="text-3xl mb-4">Foglalni kívánt helyek:</h1>
-  <h4 v-for="seat in store.seatsList" class="ml-3 font-semibold text-xl">Sor: {{ seat.row_number }}, Szék: {{ seat.seat_number }}</h4>
+  <h4 v-for="seat in seatStore.getList" class="ml-3 font-semibold text-xl">Sor: {{ seat.row_number }}, Szék: {{ seat.seat_number }}</h4>
   <div class="text-center mt-4">
     <h3 class="text-2xl mb-4 font-semibold text-red-600">A foglalás véglegesítéséhez kérjük adja meg E-mail címét!</h3>
     <input id="emailAddress" type="text" placeholder="E-mail" class="mb-6 mx-auto border-2 border-gray-300 text-gray-900 text-lg rounded-lg block p-2.5">
