@@ -67,8 +67,8 @@
         {{ i }}
       </div>
       <button v-for="j in 8" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
-              :class="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500' : 'bg-red-700'"
-              :data-status="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad' : 'elkelt'"
+              :class="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500' : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && s.status === 'foglalt') ? 'bg-slate-600' : 'bg-red-700'"
+              :data-status="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad' : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && s.status === 'foglalt') ? 'foglalt' : 'elkelt'"
               :data-seatID="(i - 1) * 8 + j" :data-rowNumber="i" :data-seatNumber="j"
               :disabled="seats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
         {{ j }}
