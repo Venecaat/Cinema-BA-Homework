@@ -6,7 +6,6 @@
   let email = "";
 
   const removeTempRes = async () => {
-    console.log(tempResStore.getList);
     await useFetch("/api/removeTempReservation", {
       method: "post",
       body: {
@@ -22,17 +21,16 @@
       alert("Az E-mail cím megadása kötelező!");
     }
     else {
-      const seatsToReserve = seatStore.getList;
+      const reservedSeatIds = tempResStore.getList;
 
       await useFetch("/api/finishReservation", {
         method: "post",
         body: {
           customer: email,
-          seats: seatsToReserve
+          seatIds: reservedSeatIds
         }
       });
 
-      await removeTempRes();
       seatStore.$reset();
       tempResStore.$reset();
       navigateTo("/foglalasKesz");

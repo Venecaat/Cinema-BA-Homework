@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async(event) => {
-    const { customer, seats } = await readBody(event);
+    const { customer, seatIds } = await readBody(event);
 
     const reservation = await prisma.Reservation.create({
       data: {
@@ -11,14 +11,17 @@ export default defineEventHandler(async(event) => {
       }
     });
 
-    const data = Array.from(seats, seat => ({
-        reservation_id: reservation.id,
-        seat_id: seat.seat_id
-    }));
-
-    const createdReservation = await prisma.ReservedSeat.createMany({
-      data
-    })
+    const createdReservation = await prisma.ReservedSeat.updateMany({
+        where: {
+            id: {
+                in: seatIds
+            }
+        },
+        data: {
+            reservation_id: reservation.id,
+            status: "elkelt"
+        }
+    });
 
     return {
         reservation: createdReservation
