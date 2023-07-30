@@ -10,9 +10,9 @@ export default defineEventHandler(async(event) => {
         status: "foglalt"
     }));
 
-    const createdReservation = await prisma.ReservedSeat.createMany({
-        data
-    })
+    const createdReservation = await prisma.$transaction(
+      data.map((seat) => prisma.ReservedSeat.create({ data: seat }))
+    );
 
     return {
         reservation: createdReservation
