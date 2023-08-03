@@ -26,9 +26,10 @@ model Seat {
 }
 
 model Reservation {
-  id              Int     @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
   customer        String
   reserved_seats  ReservedSeat[]
+  reserved_at     DateTime        @default(now()) // Uses UTC
 }
 
 model ReservedSeat {
@@ -37,5 +38,5 @@ model ReservedSeat {
   reservation_id    Int?
   seat              Seat          @relation(fields: [seat_id], references: [id])
   seat_id           Int
-  status            String
+  sold              Boolean       @default(false)
 }
