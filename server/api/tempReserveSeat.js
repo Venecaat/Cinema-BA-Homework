@@ -7,7 +7,7 @@ export default defineEventHandler(async(event) => {
 
     const data = Array.from(seats, seat => ({
         seat_id: seat.seat_id,
-        status: "foglalt"
+        sold: false
     }));
 
     const createdReservation = await prisma.$transaction(

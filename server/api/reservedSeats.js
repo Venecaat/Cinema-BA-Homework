@@ -12,7 +12,7 @@ export default defineEventHandler((event) => {
     return prisma.ReservedSeat.findMany({
         select: {
             seat_id: true,
-            status: true,
+            sold: true,
             seat: {
                 select: {
                     row_number: true,

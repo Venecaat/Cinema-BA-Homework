@@ -19,7 +19,7 @@ export default defineEventHandler(async(event) => {
         },
         data: {
             reservation_id: reservation.id,
-            status: "elkelt"
+            sold: true
         }
     });
 
