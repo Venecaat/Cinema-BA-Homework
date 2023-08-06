@@ -34,7 +34,7 @@ model Reservation {
 
 model ReservedSeat {
   id                Int           @id @default(autoincrement())
-  reservation       Reservation?  @relation(fields: [reservation_id], references: [id])
+  reservation       Reservation?  @relation(fields: [reservation_id], references: [id], onDelete: Cascade)
   reservation_id    Int?
   seat              Seat          @relation(fields: [seat_id], references: [id])
   seat_id           Int
