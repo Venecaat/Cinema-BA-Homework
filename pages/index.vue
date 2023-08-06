@@ -1,18 +1,18 @@
 <script setup>
-
   import { useSeatsStore, useTempReservationStore } from "~/store/seats";
 
   const seatStore = useSeatsStore();
   const tempResStore = useTempReservationStore();
   const roomName = "ZEUS";
 
+  // Get reserved seats for the selected room
   const getSeats = async () => {
-    const { data } = await useFetch(`/api/reservedSeats?roomName=${roomName}`);
+    const { data } = await useFetch(`/api/getReservedSeats?roomName=${roomName}`);
     return JSON.parse(JSON.stringify(data.value));
   }
-
   const seats = await getSeats();
 
+  // Selecting the seats
   const select = (e) => {
     let selectedElement = e.target;
     let status = selectedElement.dataset.status;
@@ -29,6 +29,7 @@
     }
   }
 
+  // Clicking 'Tovább' button reserves the selected seats
   const reserveSeats = async () => {
     const seatsToReserve = document.querySelectorAll("[data-status='foglalas_alatt']");
 
