@@ -10,6 +10,7 @@ export default defineEventHandler(async(event) => {
         customer: customer
       }
     });
+    const chance = Math.floor(Math.random() * 100);
 
     const createdReservation = await prisma.ReservedSeat.updateMany({
         where: {
@@ -19,11 +20,12 @@ export default defineEventHandler(async(event) => {
         },
         data: {
             reservation_id: reservation.id,
-            sold: true
+            sold: chance >= 50
         }
     });
 
     return {
+        message: chance >= 50 ? "ok" : "error",
         reservation: createdReservation
     }
 })
