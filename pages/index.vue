@@ -10,7 +10,33 @@
     const { data } = await useFetch(`/api/getReservedSeats?roomName=${roomName}`);
     return JSON.parse(JSON.stringify(data.value));
   }
-  const seats = await getSeats();
+  let seats = await getSeats();
+
+  // Check reserved seats in case of 2 min elapsed since reservation to free the seats
+  const minuteInMilliseconds = 60000;
+
+  if (seats.some(s => !s.sold)) {
+    const failedReservationIds = [];
+
+    for (const seat of seats) {
+      const reserveTime = Date.parse(seat.reservation.reserved_at); // Add 2 hour because prisma DateTime uses UTC
+      if (!seat.sold) {
+        if ((Date.now() - reserveTime) / minuteInMilliseconds >= 2) {
+          failedReservationIds.push(seat.reservation.id)
+        }
+      }
+    }
+
+    if (failedReservationIds.length !== 0) {
+      await useFetch(`/api/deleteManyReservation`, {
+        method: "post",
+        body: {
+          reservationIds: failedReservationIds
+        }
+      });
+      seats = seats.filter(s => !(s.reservation.id in failedReservationIds)); // Todo
+    }
+  }
 
   // Selecting the seats
   const select = (e) => {
