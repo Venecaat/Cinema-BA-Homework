@@ -18,6 +18,12 @@ export default defineEventHandler((event) => {
                     row_number: true,
                     seat_number: true
                 }
+            },
+            reservation: {
+                select: {
+                    id: true,
+                    reserved_at: true
+                }
             }
         }
     });
