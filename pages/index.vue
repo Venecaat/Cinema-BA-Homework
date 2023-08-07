@@ -7,7 +7,7 @@
 
   // Get reserved seats for the selected room
   const getSeats = async () => {
-    const { data } = await useFetch(`/api/getReservedSeats?roomName=${roomName}`);
+    const { data } = await useFetch(`/api/reservedSeat/getReservedSeats?roomName=${roomName}`);
     return JSON.parse(JSON.stringify(data.value));
   }
   let seats = await getSeats();
@@ -28,8 +28,8 @@
     }
 
     if (failedReservationIds.length !== 0) {
-      await useFetch(`/api/deleteManyReservation`, {
-        method: "post",
+      await useFetch(`/api/reservation/deleteReservations`, {
+        method: "delete",
         body: {
           reservationIds: failedReservationIds
         }
@@ -79,7 +79,7 @@
         }
         const tempSeats = seatStore.getList;
 
-        const { data } = await useFetch("/api/tempReserveSeat", {
+        const { data } = await useFetch("/api/reservedSeat/createReservedSeats", {
           method: "post",
           body: {
             seats: tempSeats

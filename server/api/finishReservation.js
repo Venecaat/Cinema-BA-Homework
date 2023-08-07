@@ -5,10 +5,11 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async(event) => {
     const { customer, seatIds } = await readBody(event);
 
-    const reservation = await prisma.Reservation.create({
-      data: {
-        customer: customer
-      }
+    const reservation = await $fetch("/api/reservation/createReservation", {
+        method: "post",
+        body: {
+            customer: customer
+        }
     });
     const chance = Math.floor(Math.random() * 100);
 

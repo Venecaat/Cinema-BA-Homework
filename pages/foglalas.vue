@@ -6,8 +6,8 @@
   let email = "";
 
   const removeTempRes = async () => {
-    await useFetch("/api/removeTempReservation", {
-      method: "post",
+    await useFetch("/api/reservedSeat/deleteReservedSeats", {
+      method: "delete",
       body: {
         reservedSeatIds: tempResStore.getList
       }

@@ -5,15 +5,11 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async(event) => {
     const { reservedSeatIds } = await readBody(event);
 
-    const res = await prisma.ReservedSeat.deleteMany({
+    return prisma.ReservedSeat.deleteMany({
         where: {
             id: {
                 in: reservedSeatIds
             }
         }
     });
-
-    return {
-        result: res
-    }
 })
