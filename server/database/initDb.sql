@@ -53,7 +53,11 @@ ALTER TABLE `ReservedSeat` ADD CONSTRAINT `ReservedSeat_seat_id_fkey` FOREIGN KE
 
 -- Add Values
 
-INSERT INTO `Room` VALUES (1, "ZEUS");
+INSERT INTO `Room`
+VALUES
+    (1, "ZEUS"),
+    (2, "THOR"),
+    (3, "ATHENE");
 
 INSERT INTO `Seat`
 VALUES
