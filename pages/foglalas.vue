@@ -41,7 +41,7 @@
     await removeTempRes();
     seatStore.$reset();
     tempResStore.$reset();
-    navigateTo("/");
+    history.back();
   }
 </script>
 
