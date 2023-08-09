@@ -1,15 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
     const { roomName } = getQuery(event);
-    const roomId = prisma.room.findUnique({
-        where: {
-            name: roomName
-        }
-    });
+    const { id } = await $fetch(`/api/room/getRoomByName?roomName=${roomName}`);
 
     return prisma.ReservedSeat.findMany({
+        where: {
+            seat: {
+                room_id: id
+            }
+        },
         select: {
             seat_id: true,
             sold: true,
