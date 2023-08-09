@@ -11,7 +11,7 @@ const getSeats = async () => {
   return JSON.parse(JSON.stringify(data.value));
 }
 let seats = await getSeats();
-console.log(seats);
+if (seats === null) throw createError({ statusCode: 404, statusMessage: "Page Not Found" });
 
 // Check reserved seats in case of 2 min elapsed since reservation to free the seats
 const minuteInMilliseconds = 60000;
@@ -20,7 +20,7 @@ if (seats.some(s => !s.sold)) {
   const failedReservationIds = [];
 
   for (const seat of seats) {
-    const reserveTime = Date.parse(seat.reservation.reserved_at); // Add 2 hour because prisma DateTime uses UTC
+    const reserveTime = Date.parse(seat.reservation.reserved_at);
     if (!seat.sold) {
       if ((Date.now() - reserveTime) / minuteInMilliseconds >= 2) {
         failedReservationIds.push(seat.reservation.id)

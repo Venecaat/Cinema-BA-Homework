@@ -5,6 +5,8 @@ export default defineEventHandler(async (event) => {
     const { roomName } = getQuery(event);
     const { id } = await $fetch(`/api/room/getRoomByName?roomName=${roomName}`);
 
+    if (id === null) return null;
+
     return prisma.ReservedSeat.findMany({
         where: {
             seat: {
