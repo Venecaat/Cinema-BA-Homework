@@ -13,6 +13,13 @@ const getSeats = async () => {
 let seats = await getSeats();
 if (seats === null) throw createError({ statusCode: 404, statusMessage: "Page Not Found" });
 
+// Get row and seat number in a row for a room
+const getNoRowsAndSeats = async () => {
+  const { data } = await useFetch(`/api/seat/getRowAndNoSeatsInRow?roomName=${name}`);
+  return JSON.parse(JSON.stringify(data.value._max));
+}
+const noRowsAndSeats = await getNoRowsAndSeats();
+
 // Check reserved seats in case of 2 min elapsed since reservation to free the seats
 const minuteInMilliseconds = 60000;
 
@@ -105,13 +112,15 @@ const reserveSeats = async () => {
   </div>
 
   <div class="grid gap-3 p-4 w-6/12 mb-6 mx-auto font-semibold">
-    <div v-for="i in 8" :key="i" class="grid grid-flow-col">
+    <div v-for="i in noRowsAndSeats.row_number" :key="i" class="grid grid-flow-col">
       <div class="text-center font-semibold py-3 text-xl">
         {{ i }}
       </div>
-      <button v-for="j in 8" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
-              :class="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500' : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'bg-slate-600' : 'bg-red-700'"
-              :data-status="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad' : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'foglalt' : 'elkelt'"
+      <button v-for="j in noRowsAndSeats.seat_number" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
+              :class="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500'
+                : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'bg-slate-600' : 'bg-red-700'"
+              :data-status="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad'
+                : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'foglalt' : 'elkelt'"
               :data-seatID="(i - 1) * 8 + j" :data-rowNumber="i" :data-seatNumber="j"
               :disabled="seats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
         {{ j }}
