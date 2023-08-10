@@ -13,7 +13,7 @@
             <NuxtLink href="/" class="block py-2 pl-3 pr-4 text-cyan-50 hover:text-red-700">Főoldal</NuxtLink>
           </li>
           <li>
-            <NuxtLink href="/termek" class="block py-2 pl-3 pr-4 text-cyan-50 hover:text-red-700">Termek</NuxtLink>
+            <NuxtLink href="/rooms" class="block py-2 pl-3 pr-4 text-cyan-50 hover:text-red-700">Termek</NuxtLink>
           </li>
         </ul>
       </div>

@@ -33,7 +33,7 @@
 
       seatStore.$reset();
       tempResStore.$reset();
-      navigateTo("/foglalasKesz");
+      navigateTo("/reserveConfirm");
     }
   }
 

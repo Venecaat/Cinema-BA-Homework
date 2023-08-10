@@ -8,7 +8,7 @@
 <template>
   <div class="flex justify-between">
     <div>
-      <NuxtLink v-for="room in rooms" :to="'/termek/' + room.name.toLowerCase()" class="text-3xl font-semibold mb-4 hover:text-red-700 block max-w-fit">{{ room.name }}</NuxtLink>
+      <NuxtLink v-for="room in rooms" :to="'/rooms/' + room.name.toLowerCase()" class="text-3xl font-semibold mb-4 hover:text-red-700 block max-w-fit">{{ room.name }}</NuxtLink>
     </div>
     <BackButton to="/"></BackButton>
   </div>

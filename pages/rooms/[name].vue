@@ -42,7 +42,7 @@ if (seats.some(s => !s.sold)) {
         reservationIds: failedReservationIds
       }
     });
-    seats = seats.filter(s => !(s.reservation.id in failedReservationIds)); // Todo
+    seats = seats.filter(s => !(s.reservation.id in failedReservationIds)); // Not working. Probably the "in" is not working?
   }
 }
 
@@ -99,7 +99,7 @@ const reserveSeats = async () => {
         tempResStore.addTempRes(res.id);
       }
 
-      navigateTo("/foglalas");
+      navigateTo("/reserve");
     }
   }
 }
@@ -108,7 +108,7 @@ const reserveSeats = async () => {
 <template>
   <div class="flex justify-between mb-4">
     <h1 class="text-4xl">Terem - {{ name.toUpperCase() }}</h1>
-    <BackButton to="/termek"></BackButton>
+    <BackButton to="/rooms"></BackButton>
   </div>
   <div class="text-xl pl-4 mb-6 font-semibold">
     <h3>Oppenheimer - 19:30</h3>
