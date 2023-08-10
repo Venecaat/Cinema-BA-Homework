@@ -106,7 +106,10 @@ const reserveSeats = async () => {
 </script>
 
 <template>
-  <h1 class="text-3xl mb-4">Terem - {{ name.toUpperCase() }}</h1>
+  <div class="flex justify-between mb-4">
+    <h1 class="text-4xl">Terem - {{ name.toUpperCase() }}</h1>
+    <BackButton to="/termek"></BackButton>
+  </div>
   <div class="text-xl pl-4 mb-6 font-semibold">
     <h3>Oppenheimer - 19:30</h3>
   </div>
