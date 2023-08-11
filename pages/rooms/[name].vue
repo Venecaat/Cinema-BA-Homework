@@ -5,6 +5,7 @@ const seatStore = useSeatsStore();
 const tempResStore = useTempReservationStore();
 const { name } = useRoute().params;
 
+
 // Get room id
 const getRoomId = async () => {
   const { data } = await useFetch(`/api/room/getRoomByName?roomName=${name}`);
@@ -13,6 +14,15 @@ const getRoomId = async () => {
 const roomId = await getRoomId();
 if (roomId === null) throw createError({ statusCode: 404, statusMessage: "Page Not Found" });
 
+
+// Get seats for the selected room
+const getSeats = async () => {
+  const { data } = await useFetch(`/api/seat/getSeats?id=${roomId}`);
+  return JSON.parse(JSON.stringify(data.value));
+}
+const seats = await getSeats();
+
+
 // Get reserved seats for the selected room
 const getReservedSeats = async () => {
   const { data } = await useFetch(`/api/reservedSeat/getReservedSeats?id=${roomId}`);
@@ -20,12 +30,14 @@ const getReservedSeats = async () => {
 }
 let reservedSeats = await getReservedSeats();
 
+
 // Get row and seat number in a row for a room
 const getNoRowsAndSeats = async () => {
   const { data } = await useFetch(`/api/seat/getRowAndNoSeatsInRow?id=${roomId}`);
   return JSON.parse(JSON.stringify(data.value._max));
 }
 const noRowsAndSeats = await getNoRowsAndSeats();
+
 
 // Check reserved seats in case of 2 min elapsed since reservation to free the seats
 const minuteInMilliseconds = 60000;
@@ -49,9 +61,10 @@ if (reservedSeats.some(s => !s.sold)) {
         reservationIds: failedReservationIds
       }
     });
-    reservedSeats = reservedSeats.filter(s => !(s.reservation.id in failedReservationIds)); // Not working. Probably the "in" is not working?
+    // reservedSeats = reservedSeats.filter(s => !(s.reservation.id in failedReservationIds)); // Not working. Probably the "in" is not working?
   }
 }
+
 
 // Selecting the seats
 const select = (e) => {
@@ -69,6 +82,7 @@ const select = (e) => {
     selectedElement.classList.remove("bg-orange-500", "hover:bg-orange-400");
   }
 }
+
 
 // Clicking 'Tovább' button reserves the selected seats
 const reserveSeats = async () => {
