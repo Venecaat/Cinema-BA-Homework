@@ -5,17 +5,24 @@ const seatStore = useSeatsStore();
 const tempResStore = useTempReservationStore();
 const { name } = useRoute().params;
 
+// Get room id
+const getRoomId = async () => {
+  const { data } = await useFetch(`/api/room/getRoomByName?roomName=${name}`);
+  return data.value === null ? null : data.value.id;
+}
+const roomId = await getRoomId();
+if (roomId === null) throw createError({ statusCode: 404, statusMessage: "Page Not Found" });
+
 // Get reserved seats for the selected room
 const getSeats = async () => {
-  const { data } = await useFetch(`/api/reservedSeat/getReservedSeats?roomName=${name}`);
+  const { data } = await useFetch(`/api/reservedSeat/getReservedSeats?id=${roomId}`);
   return JSON.parse(JSON.stringify(data.value));
 }
 let seats = await getSeats();
-if (seats === null) throw createError({ statusCode: 404, statusMessage: "Page Not Found" });
 
 // Get row and seat number in a row for a room
 const getNoRowsAndSeats = async () => {
-  const { data } = await useFetch(`/api/seat/getRowAndNoSeatsInRow?roomName=${name}`);
+  const { data } = await useFetch(`/api/seat/getRowAndNoSeatsInRow?id=${roomId}`);
   return JSON.parse(JSON.stringify(data.value._max));
 }
 const noRowsAndSeats = await getNoRowsAndSeats();
