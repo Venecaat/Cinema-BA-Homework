@@ -139,7 +139,7 @@ const reserveSeats = async () => {
                 : reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'bg-slate-600' : 'bg-red-700'"
               :data-status="!reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad'
                 : reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'foglalt' : 'elkelt'"
-              :data-seatID="(i - 1) * 8 + j" :data-rowNumber="i" :data-seatNumber="j"
+              :data-seatID="seats[(i - 1) * noSeatsInRow + j - 1].id" :data-rowNumber="i" :data-seatNumber="j"
               :disabled="reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
         {{ j }}
       </button>
