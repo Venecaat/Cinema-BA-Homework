@@ -21,6 +21,8 @@ const getSeats = async () => {
   return JSON.parse(JSON.stringify(data.value));
 }
 const seats = await getSeats();
+const noRows = Math.max(...seats.map(s => s.row_number));
+const noSeatsInRow = Math.max(...seats.map(s => s.seat_number));
 
 
 // Get reserved seats for the selected room
@@ -29,14 +31,6 @@ const getReservedSeats = async () => {
   return JSON.parse(JSON.stringify(data.value));
 }
 let reservedSeats = await getReservedSeats();
-
-
-// Get row and seat number in a row for a room
-const getNoRowsAndSeats = async () => {
-  const { data } = await useFetch(`/api/seat/getRowAndNoSeatsInRow?id=${roomId}`);
-  return JSON.parse(JSON.stringify(data.value._max));
-}
-const noRowsAndSeats = await getNoRowsAndSeats();
 
 
 // Check reserved seats in case of 2 min elapsed since reservation to free the seats
@@ -136,11 +130,11 @@ const reserveSeats = async () => {
   </div>
 
   <div class="grid gap-3 p-4 w-6/12 mb-6 mx-auto font-semibold">
-    <div v-for="i in noRowsAndSeats.row_number" :key="i" class="grid grid-flow-col">
+    <div v-for="i in noRows" :key="i" class="grid grid-flow-col">
       <div class="text-center font-semibold py-3 text-xl">
         {{ i }}
       </div>
-      <button v-for="j in noRowsAndSeats.seat_number" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
+      <button v-for="j in noSeatsInRow" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
               :class="!reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500'
                 : reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'bg-slate-600' : 'bg-red-700'"
               :data-status="!reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad'
