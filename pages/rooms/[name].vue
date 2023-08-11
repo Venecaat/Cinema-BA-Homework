@@ -14,11 +14,11 @@ const roomId = await getRoomId();
 if (roomId === null) throw createError({ statusCode: 404, statusMessage: "Page Not Found" });
 
 // Get reserved seats for the selected room
-const getSeats = async () => {
+const getReservedSeats = async () => {
   const { data } = await useFetch(`/api/reservedSeat/getReservedSeats?id=${roomId}`);
   return JSON.parse(JSON.stringify(data.value));
 }
-let seats = await getSeats();
+let reservedSeats = await getReservedSeats();
 
 // Get row and seat number in a row for a room
 const getNoRowsAndSeats = async () => {
@@ -30,10 +30,10 @@ const noRowsAndSeats = await getNoRowsAndSeats();
 // Check reserved seats in case of 2 min elapsed since reservation to free the seats
 const minuteInMilliseconds = 60000;
 
-if (seats.some(s => !s.sold)) {
+if (reservedSeats.some(s => !s.sold)) {
   const failedReservationIds = [];
 
-  for (const seat of seats) {
+  for (const seat of reservedSeats) {
     const reserveTime = Date.parse(seat.reservation.reserved_at);
     if (!seat.sold) {
       if ((Date.now() - reserveTime) / minuteInMilliseconds >= 2) {
@@ -49,7 +49,7 @@ if (seats.some(s => !s.sold)) {
         reservationIds: failedReservationIds
       }
     });
-    seats = seats.filter(s => !(s.reservation.id in failedReservationIds)); // Not working. Probably the "in" is not working?
+    reservedSeats = reservedSeats.filter(s => !(s.reservation.id in failedReservationIds)); // Not working. Probably the "in" is not working?
   }
 }
 
@@ -77,7 +77,7 @@ const reserveSeats = async () => {
   if (seatsToReserve.length === 0) alert("Nem választott ki egy helyet sem!");
   else {
     let conflicts = 0;
-    const seatsCheck = await getSeats();
+    const seatsCheck = await getReservedSeats();
 
     for (const seat of seatsToReserve) {
       if (seatsCheck.some(s => s.seat_id === seat.dataset.seatid)) conflicts++;
@@ -127,12 +127,12 @@ const reserveSeats = async () => {
         {{ i }}
       </div>
       <button v-for="j in noRowsAndSeats.seat_number" :key="j" class="w-12 h-12 rounded-lg text-center align-middle py-3 mx-auto text-white"
-              :class="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500'
-                : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'bg-slate-600' : 'bg-red-700'"
-              :data-status="!seats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad'
-                : seats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'foglalt' : 'elkelt'"
+              :class="!reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'bg-green-600 hover:bg-green-500'
+                : reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'bg-slate-600' : 'bg-red-700'"
+              :data-status="!reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j) ? 'szabad'
+                : reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j && !s.sold) ? 'foglalt' : 'elkelt'"
               :data-seatID="(i - 1) * 8 + j" :data-rowNumber="i" :data-seatNumber="j"
-              :disabled="seats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
+              :disabled="reservedSeats.some(s => s.seat.row_number === i && s.seat.seat_number === j)" @click="select">
         {{ j }}
       </button>
       <div class="text-center font-semibold py-3 text-xl">
